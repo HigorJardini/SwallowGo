@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${SWALLOWGO_DATABASE_NAME}
+      POSTGRES_USER: ${SWALLOWGO_DATABASE_USER}
+      POSTGRES_PASSWORD: ${SWALLOWGO_DATABASE_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
