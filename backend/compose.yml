@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   db:
     image: postgres:latest
@@ -11,6 +13,35 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-password}
+    ports:
+      - 8081:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - SWALLOWGO_DATABASE_NAME=${SWALLOWGO_DATABASE_NAME}
+      - SWALLOWGO_DATABASE_PORT=${SWALLOWGO_DATABASE_PORT:-5432}
+      - SWALLOWGO_DATABASE_HOST=${SWALLOWGO_DATABASE_HOST_DOCKER:-db}
+      - SWALLOWGO_DATABASE_USER=${SWALLOWGO_DATABASE_USER}
+      - SWALLOWGO_DATABASE_PASSWORD=${SWALLOWGO_DATABASE_PASSWORD}
+    depends_on:
+      - db
+
 volumes:
   db:
+    driver: local
+  pgadmin:
     driver: local
