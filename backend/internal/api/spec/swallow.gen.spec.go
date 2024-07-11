@@ -25,8 +25,8 @@ import (
 
 // CreateActivityRequest defines model for CreateActivityRequest.
 type CreateActivityRequest struct {
-	OccursAt time.Time `json:"occurs_at"`
-	Title    string    `json:"title"`
+	OccursAt time.Time `json:"occurs_at" validate:"required"`
+	Title    string    `json:"title" validate:"required"`
 }
 
 // CreateActivityResponse defines model for CreateActivityResponse.
@@ -36,8 +36,8 @@ type CreateActivityResponse struct {
 
 // CreateLinkRequest defines model for CreateLinkRequest.
 type CreateLinkRequest struct {
-	Title string `json:"title"`
-	URL   string `json:"url"`
+	Title string `json:"title" validate:"required"`
+	URL   string `json:"url" validate:"required,url"`
 }
 
 // CreateLinkResponse defines model for CreateLinkResponse.
@@ -47,12 +47,12 @@ type CreateLinkResponse struct {
 
 // CreateTripRequest defines model for CreateTripRequest.
 type CreateTripRequest struct {
-	Destination    string                `json:"destination"`
-	EmailsToInvite []openapi_types.Email `json:"emails_to_invite"`
-	EndsAt         time.Time             `json:"ends_at"`
-	OwnerEmail     openapi_types.Email   `json:"owner_email"`
-	OwnerName      string                `json:"owner_name"`
-	StartsAt       time.Time             `json:"starts_at"`
+	Destination    string                `json:"destination" validate:"required,min=4"`
+	EmailsToInvite []openapi_types.Email `json:"emails_to_invite" validate:"required,dive,email"`
+	EndsAt         time.Time             `json:"ends_at" validate:"required"`
+	OwnerEmail     openapi_types.Email   `json:"owner_email" validate:"required,email"`
+	OwnerName      string                `json:"owner_name" validate:"required"`
+	StartsAt       time.Time             `json:"starts_at" validate:"required"`
 }
 
 // CreateTripResponse defines model for CreateTripResponse.
@@ -124,14 +124,14 @@ type GetTripParticipantsResponseArray struct {
 
 // InviteParticipantRequest defines model for InviteParticipantRequest.
 type InviteParticipantRequest struct {
-	Email openapi_types.Email `json:"email"`
+	Email openapi_types.Email `json:"email" validate:"required,email"`
 }
 
 // UpdateTripRequest defines model for UpdateTripRequest.
 type UpdateTripRequest struct {
-	Destination string    `json:"destination"`
-	EndsAt      time.Time `json:"ends_at"`
-	StartsAt    time.Time `json:"starts_at"`
+	Destination string    `json:"destination" validate:"required,min=4"`
+	EndsAt      time.Time `json:"ends_at" validate:"required"`
+	StartsAt    time.Time `json:"starts_at" validate:"required"`
 }
 
 // PostTripsJSONBody defines parameters for PostTrips.
@@ -922,29 +922,30 @@ func WithErrorHandler(handler func(w http.ResponseWriter, r *http.Request, err e
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/+Raz27bOBN/FYLfd3TidDcn3dKmCAwUaLDbPRVFQEvjmIlEquQohmH4afawT7BP0Bdb",
-	"kJRsSqZjyrEbOL20jkxy/vxmfjMjekFTWZRSgEBNkwXV6RQKZj9+UMAQrlLkTxznf8D3CjSaL1iWceRS",
-	"sPxWyRIUctA0mbBcw4CW3qMFlWlaKX3H7L6JVIX5RDOGcIa8ADqgOC+BJlSj4uKeLgcUOeZglne+WQ6o",
-	"gu8VV5DR5Kt3crPl2+owOX6AFM1hXRt0KYWGnkawevsoa1lRVTzbNKCjprd3u36fuHjcz7/bnDWglcrb",
-	"2iq+U1l3mtu7S9u9PJlz8biPF+t923X6oni5nwcz0MgFM6vNnwUXn0Dc45Qml4HghILxXN+hvOPiiaO1",
-	"nyMUumWTXRWMbfeAKcXm9jiR9UsOOROg7tz5URLdBsGKcJRoZAr7qNABxveef9ratIDPWlq1bdqF8F5R",
-	"h4qX+0RdvS+k00elpNqpRgY6Vbx0sUXfs4yoOka7KhagNbuPoL1mYUipG0CTm/oFyalbAf1/BROa0P8N",
-	"1zViWBeIYVfYVRPT7RgPJLKOUt6d188CHgPy4MCk6WTsYM4bQBPAdSHioF9Wihp7I4EKi/5cIag42Dyx",
-	"vawbCdGIOAqSx2svWqiuxfSy3nPw66HsQRAoQMZV+1I/s1QeFxrXgKYIvIDAIx3QEWQefR4/BKm9h77N",
-	"MUdtLfr2ApE5wvVdKsWEqwIyL+7HUubAxCGaACs3phNoqfKM92+ZQp7ykgncN2RK74i+SRQSH8eTLak9",
-	"DdyHKHo0gjwLVrzd0dH0jqLKczY23ImqgqiYqBu8Rqed8I9sf+g5Z7+WPtorHZ23t6B/ldnPHDL6MsHx",
-	"u/hNp5gzuJjI2jyvz/2oS0j5hKfsxz8//gVNMkaubkekZIoRScYsfTwDkZnHrMzdsr8l+XPG8lzObuT5",
-	"qvImdPWQDugTKO0kvDu/OL+w9b8EwUpOE/q7fTSgJcOpdfnQz8XhwvtrlC2HdRw6psB0at9VlKCsD8ys",
-	"QG/NYz9Pvc+j6w/1fiNQsQIQlKbJ1wXlRj+jRBP+CW2Jpr7nXSI59okZT76ZzY4trI2/XVya/1IpEISL",
-	"ydJ61FgxfNAu2tbng6gKg7dJZQNpO6UtpG0or2HCqhzJioSXA3p5cdFL6HOE68aogGB/VjLf6qoomJrT",
-	"hNae14QRz7FECsKIqeo2eti93qRjc87QLHEFQros7qAutSVoXeMEGt/LbH4wgzffVizbyWiB2ID53VEU",
-	"aDA9Ddyt4oQRATMLtIezA9UDeLhws/vSKHIPAaDrQqzNP6PrqDyuXwccNoEP59MtnfZpoHsDWOcvyZwB",
-	"5wF8B7SsQklbvRqWh2eIzVYjiiF+vULgHBVg/e1sMGwP1jUxtAV+mXJNlKwQyIznOVGAlRKE5TnBKRAj",
-	"U5Mx4AxA2Cc2aFc9E2EiI3XX5BYPCDzZpVKbI3EqKyRrRYzmz1HTeqJ/QyQVeA92cjzVhrAJPv91iOGr",
-	"57uMV4X4WN1N98bwVTqcjSu/E+ty/BCbbw2wAMV5k01E49NnjjkKtfyyA8wKY5ERbcZhOCsYz4m9I7Oq",
-	"6Mii5m7VYoYah/moXn/aXLP1XdER6OYthJ3zF9GyACmAoFw1LzET8zraVreEEexiL/TeSNvSvlk9uW7F",
-	"wuYjXd/ExvYoPx/KY7Un/o9tXqU1af1+5hTbEhM6oVAKsEX3GiaCNPx3rm9o5AneaZ0cjfh4Plc3lsv/",
-	"AgAA///fLtnCWSgAAA==",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

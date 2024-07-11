@@ -1,2 +1,18 @@
 ###
-PATCH  http://localhost:8080/participants/550e8400-e29b-41d4-a716-446655440000/confirm
+PATCH  http://localhost:8080/participants/d02c8307-09ef-4415-a3a8-c678b15b211f/confirm
+
+###
+POST http://localhost:8080/trips
+Content-Type: application/json
+
+{
+  "destination": "Japan",
+  "starts_at": "2024-07-10T19:53:09.884Z",
+  "ends_at": "2024-07-28T19:53:09.884Z",
+  "emails_to_invite": [
+    "user@example.com",
+    "user2@example.com"
+  ],
+  "owner_name": "Higor",
+  "owner_email": "contact@higorjardini.dev"
+}

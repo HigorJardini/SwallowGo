@@ -1,0 +1,6 @@
+
+go generate ./...
+
+Case New Module:
+go mod tidy
+go get -u ./... -- Update all modules

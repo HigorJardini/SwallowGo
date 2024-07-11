@@ -3,6 +3,7 @@ package main
 import (
 	"SwallowGo/internal/api"
 	"SwallowGo/internal/api/spec"
+	"SwallowGo/internal/mailer/mailpit"
 	"context"
 	"errors"
 	"fmt"
@@ -12,8 +13,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/phenpessoa/gutils/netutils/httputils"
 	"go.uber.org/zap"
@@ -64,6 +65,7 @@ func run(ctx context.Context) error {
 	si := api.NewApi(
 		pool,
 		logger,
+		mailpit.NewMailpit(pool),
 	)
 	r := chi.NewMux()
 	r.Use(middleware.RequestID, middleware.Recoverer, httputils.ChiLogger(logger))

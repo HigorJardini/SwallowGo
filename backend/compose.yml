@@ -26,6 +26,17 @@ services:
     volumes:
       - pgadmin:/var/lib/pgadmin
 
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    volumes:
+      - mailpit:/data
+    ports:
+      - 1025:1025
+      - 8025:8025
+    environment:
+      MP_DATABASE: /data/mailpit.db
+
   app:
     build: .
     restart: unless-stopped
@@ -37,6 +48,7 @@ services:
       - SWALLOWGO_DATABASE_HOST=${SWALLOWGO_DATABASE_HOST_DOCKER:-db}
       - SWALLOWGO_DATABASE_USER=${SWALLOWGO_DATABASE_USER}
       - SWALLOWGO_DATABASE_PASSWORD=${SWALLOWGO_DATABASE_PASSWORD}
+      - SWALLOWGO_EMAIL_HOST=${SWALLOWGO_EMAIL_HOST_DOCKER:-mailpit}
     depends_on:
       - db
 
@@ -44,4 +56,6 @@ volumes:
   db:
     driver: local
   pgadmin:
+    driver: local
+  mailpit:
     driver: local
