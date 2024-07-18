@@ -1,5 +1,5 @@
 ###
-PATCH  http://localhost:8080/participants/d02c8307-09ef-4415-a3a8-c678b15b211f/confirm
+PATCH  http://localhost:8080/participants/c40d31d5-9dea-46f4-915c-7429e7f6dff7/confirm
 
 ###
 POST http://localhost:8080/trips

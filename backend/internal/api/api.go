@@ -44,20 +44,20 @@ func NewApi(pool *pgxpool.Pool, logger *zap.Logger, mailer mailer) API {
 func (api API) PatchParticipantsParticipantIDConfirm(w http.ResponseWriter, r *http.Request, participantID string) *spec.Response {
 	id, err := uuid.Parse(participantID)
 	if err != nil {
-		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "uuid invalid"})
+		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "invalid uuid",})
 	}
 
 	participant, err := api.store.GetParticipant(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "Participant was not found"})
+			return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "participant not found",})
 		}
 		api.logger.Error("failed to get participant", zap.Error(err), zap.String("participant_id", participantID))
-		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "Something went wrong, try again"})
+		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "something went wrong, try again",})
 	}
 
 	if participant.IsConfirmed {
-		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "Participant is already confirmed"})
+		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "participant already confirmed",})
 	}
 
 	if err := api.store.ConfirmParticipant(r.Context(), id); err != nil {
@@ -65,7 +65,7 @@ func (api API) PatchParticipantsParticipantIDConfirm(w http.ResponseWriter, r *h
 		return spec.PatchParticipantsParticipantIDConfirmJSON400Response(spec.Error{Message: "something went wrong, try again",})
 	}
 
-	return spec.PatchParticipantsParticipantIDConfirmJSON204Response(nil);
+	return spec.PatchParticipantsParticipantIDConfirmJSON204Response(nil)
 }
 
 // Create a new trip

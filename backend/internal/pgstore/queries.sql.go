@@ -13,9 +13,9 @@ import (
 )
 
 const confirmParticipant = `-- name: ConfirmParticipant :exec
-SELECT
-    "id", "trip_id", "email", "is_confirmed"
-FROM participants
+UPDATE participants
+SET 
+    "is_confirmed" = true
 WHERE
     id = $1
 `
