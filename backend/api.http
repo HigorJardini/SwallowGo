@@ -1,8 +1,14 @@
-###
-PATCH  http://localhost:8080/participants/c40d31d5-9dea-46f4-915c-7429e7f6dff7/confirm
+@baseUrl = http://localhost:8080
+@participantId = c40d31d5-9dea-46f4-915c-7429e7f6dff7
+@tripId = 42bf829c-3faa-424c-9ff4-d9b061561002
+
+### PATCH request to confirm a participant
+PATCH  {{baseUrl}}/participants/{{participantId}}/confirm
 
 ###
-POST http://localhost:8080/trips
+
+### POST request to create a new trip
+POST {{baseUrl}}/trips
 Content-Type: application/json
 
 {
@@ -15,4 +21,24 @@ Content-Type: application/json
   ],
   "owner_name": "Higor",
   "owner_email": "contact@higorjardini.dev"
+}
+
+###
+
+### GET request to fetch a specific trip
+GET  {{baseUrl}}/trips/{{tripId}}
+
+###
+
+### GET request to confirm a trip
+GET {{baseUrl}}/trips/{{tripId}}/confirm
+
+###
+PUT {{baseUrl}}/trips/{{tripId}}
+Content-Type: application/json
+
+{
+  "destination": "Korea",
+  "starts_at": "2024-09-29T19:53:09.884Z",
+  "ends_at": "2024-10-11T19:53:09.884Z"
 }

@@ -48,3 +48,28 @@ func (q *Queries) CreateTrip(ctx context.Context, pool *pgxpool.Pool, params spe
 
 	return tripID, nil
 }
+
+func (q *Queries) PutTrip(ctx context.Context, pool *pgxpool.Pool, params spec.UpdateTripRequest, tripID uuid.UUID) error {
+	tx, err := pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("pgstore: failed to begin tx for PutTrip: %w", err)
+	}
+
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	qtx := q.WithTx(tx)
+	if err := qtx.UpdateTrip(ctx, UpdateTripParams{
+		Destination: params.Destination,
+		StartsAt:    pgtype.Timestamp{Valid: true, Time: params.StartsAt},
+		EndsAt:      pgtype.Timestamp{Valid: true, Time: params.EndsAt},
+		ID: tripID,
+	}); err != nil {
+		return fmt.Errorf("pgstore: failed to update trip for UpdateTrip: %w", err)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("pgstore: failed to commit transaction for UpdateTrip: %w", err)
+	}
+
+	return nil
+}

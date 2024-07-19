@@ -25,6 +25,19 @@ func (q *Queries) ConfirmParticipant(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const confirmTrip = `-- name: ConfirmTrip :exec
+UPDATE trips
+SET 
+    "is_confirmed" = true
+WHERE
+    id = $1
+`
+
+func (q *Queries) ConfirmTrip(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, confirmTrip, id)
+	return err
+}
+
 const createActivity = `-- name: CreateActivity :one
 INSERT INTO activities
     ( "trip_id", "title", "occurs_at" ) VALUES
@@ -247,16 +260,15 @@ SET
     "destination" = $1,
     "ends_at" = $2,
     "starts_at" = $3,
-    "is_confirmed" = $4
+    "is_confirmed" = false
 WHERE
-    id = $5
+    id = $4
 `
 
 type UpdateTripParams struct {
 	Destination string           `db:"destination" json:"destination"`
 	EndsAt      pgtype.Timestamp `db:"ends_at" json:"ends_at"`
 	StartsAt    pgtype.Timestamp `db:"starts_at" json:"starts_at"`
-	IsConfirmed bool             `db:"is_confirmed" json:"is_confirmed"`
 	ID          uuid.UUID        `db:"id" json:"id"`
 }
 
@@ -265,7 +277,6 @@ func (q *Queries) UpdateTrip(ctx context.Context, arg UpdateTripParams) error {
 		arg.Destination,
 		arg.EndsAt,
 		arg.StartsAt,
-		arg.IsConfirmed,
 		arg.ID,
 	)
 	return err

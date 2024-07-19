@@ -18,9 +18,16 @@ SET
     "destination" = $1,
     "ends_at" = $2,
     "starts_at" = $3,
-    "is_confirmed" = $4
+    "is_confirmed" = false
 WHERE
-    id = $5;
+    id = $4;
+
+-- name: ConfirmTrip :exec
+UPDATE trips
+SET 
+    "is_confirmed" = true
+WHERE
+    id = $1;
 
 -- name: GetParticipant :one
 SELECT
@@ -35,7 +42,6 @@ SET
     "is_confirmed" = true
 WHERE
     id = $1;
-
 
 -- name: GetParticipants :many
 SELECT
