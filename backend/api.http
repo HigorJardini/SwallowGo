@@ -2,12 +2,11 @@
 @participantId = c40d31d5-9dea-46f4-915c-7429e7f6dff7
 @tripId = 42bf829c-3faa-424c-9ff4-d9b061561002
 
-### PATCH request to confirm a participant
-PATCH  {{baseUrl}}/participants/{{participantId}}/confirm
-
+### Confirm a Participant
+PATCH {{baseUrl}}/participants/{{participantId}}/confirm
 ###
 
-### POST request to create a new trip
+### Create a New Trip
 POST {{baseUrl}}/trips
 Content-Type: application/json
 
@@ -22,18 +21,17 @@ Content-Type: application/json
   "owner_name": "Higor",
   "owner_email": "contact@higorjardini.dev"
 }
-
 ###
 
-### GET request to fetch a specific trip
-GET  {{baseUrl}}/trips/{{tripId}}
-
+### Fetch a Specific Trip
+GET {{baseUrl}}/trips/{{tripId}}
 ###
 
-### GET request to confirm a trip
+### Confirm a Trip
 GET {{baseUrl}}/trips/{{tripId}}/confirm
-
 ###
+
+### Update Trip Details
 PUT {{baseUrl}}/trips/{{tripId}}
 Content-Type: application/json
 
@@ -42,3 +40,22 @@ Content-Type: application/json
   "starts_at": "2024-09-29T19:53:09.884Z",
   "ends_at": "2024-10-11T19:53:09.884Z"
 }
+###
+
+### Get Participants of a Trip
+GET {{baseUrl}}/trips/{{tripId}}/participants
+###
+
+### Create a New Activity for a Trip
+POST {{baseUrl}}/trips/{{tripId}}/activities
+Content-Type: application/json
+
+{
+  "occurs_at": "2024-10-13T19:53:09.884Z",
+  "title": "Shibuya"
+}
+###
+
+### Get Activities of a Trip
+GET {{baseUrl}}/trips/{{tripId}}/activities
+###

@@ -73,3 +73,28 @@ func (q *Queries) PutTrip(ctx context.Context, pool *pgxpool.Pool, params spec.U
 
 	return nil
 }
+
+func (q *Queries) InsertActivity(ctx context.Context, pool *pgxpool.Pool, params spec.CreateActivityRequest, tripID uuid.UUID) (uuid.UUID, error) {
+	tx, err := pool.Begin(ctx)
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to begin tx for InsertActivity: %w", err)
+	}
+
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	qtx := q.WithTx(tx)
+	activityID, err := qtx.CreateActivity(ctx, CreateActivityParams{
+		TripID: tripID,
+		Title: params.Title,
+		OccursAt: pgtype.Timestamp{Valid: true, Time: params.OccursAt},
+	})
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert activity for CreateActivity: %w", err)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert trip for CreateTrip: %w", err)
+	}
+
+	return activityID, nil
+}
