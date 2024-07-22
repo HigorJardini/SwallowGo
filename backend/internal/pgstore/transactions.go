@@ -93,8 +93,57 @@ func (q *Queries) InsertActivity(ctx context.Context, pool *pgxpool.Pool, params
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert trip for CreateTrip: %w", err)
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert trip for InsertActivity: %w", err)
 	}
 
 	return activityID, nil
+}
+
+func (q *Queries) InsertInviteParticipantToTrip(ctx context.Context, pool *pgxpool.Pool, params spec.InviteParticipantRequest, tripID uuid.UUID) (uuid.UUID, error) {
+	tx, err := pool.Begin(ctx)
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to begin tx for InsertInviteParticipantToTrip: %w", err)
+	}
+
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	qtx := q.WithTx(tx)
+	participantID, err := qtx.InviteParticipantToTrip(ctx, InviteParticipantToTripParams{
+		TripID: tripID,
+		Email:  string(params.Email),
+	})
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert activity for InviteParticipantToTrip: %w", err)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert trip for InsertInviteParticipantToTrip: %w", err)
+	}
+
+	return participantID, nil
+}
+
+func (q *Queries) InsertTripsTripIDLinks(ctx context.Context, pool *pgxpool.Pool, params spec.CreateLinkRequest, tripID uuid.UUID) (uuid.UUID, error) {
+	tx, err := pool.Begin(ctx)
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to begin tx for InsertTripsTripIDLinks: %w", err)
+	}
+
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	qtx := q.WithTx(tx)
+	linkId, err := qtx.CreateTripLink(ctx, CreateTripLinkParams{
+		TripID: tripID,
+		Title:  string(params.Title),
+		Url:    string(params.URL),
+	})
+	if err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert activity for InsertTripsTripIDLinks: %w", err)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return uuid.UUID{}, fmt.Errorf("pgstore: failed to insert trip for InsertTripsTripIDLinks: %w", err)
+	}
+
+	return linkId, nil
 }

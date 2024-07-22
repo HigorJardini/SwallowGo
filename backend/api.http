@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:8080
 @participantId = c40d31d5-9dea-46f4-915c-7429e7f6dff7
 @tripId = 42bf829c-3faa-424c-9ff4-d9b061561002
+@linkId = 72ec7b6d-26e9-404c-8b7f-fb613187e07e
 
 ### Confirm a Participant
 PATCH {{baseUrl}}/participants/{{participantId}}/confirm
@@ -58,4 +59,27 @@ Content-Type: application/json
 
 ### Get Activities of a Trip
 GET {{baseUrl}}/trips/{{tripId}}/activities
+###
+
+### Invite a Participant to a Trip
+POST {{baseUrl}}/trips/{{tripId}}/invites
+Content-Type: application/json
+
+{
+  "email": "contact2@higorjardini.dev"
+}
+###
+
+### Add a Link to a Trip
+POST {{baseUrl}}/trips/{{tripId}}/links
+Content-Type: application/json
+
+{
+  "title": "Airbnb",
+  "url": "https://www.airbnb.com.br/"
+}
+###
+
+### Get Links of a Trip
+GET {{baseUrl}}/trips/{{tripId}}/links
 ###

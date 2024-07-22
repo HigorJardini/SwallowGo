@@ -50,6 +50,13 @@ FROM participants
 WHERE
     trip_id = $1;
 
+-- name: InviteParticipantToTrip :one
+INSERT 
+INTO participants
+    ( "trip_id", "email" ) VALUES
+    ( $1, $2 )
+RETURNING "id";
+
 -- name: InviteParticipantsToTrip :copyfrom
 INSERT INTO participants
     ( "trip_id", "email" ) VALUES

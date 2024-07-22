@@ -249,6 +249,26 @@ func (q *Queries) InsertTrip(ctx context.Context, arg InsertTripParams) (uuid.UU
 	return id, err
 }
 
+const inviteParticipantToTrip = `-- name: InviteParticipantToTrip :one
+INSERT 
+INTO participants
+    ( "trip_id", "email" ) VALUES
+    ( $1, $2 )
+RETURNING "id"
+`
+
+type InviteParticipantToTripParams struct {
+	TripID uuid.UUID `db:"trip_id" json:"trip_id"`
+	Email  string    `db:"email" json:"email"`
+}
+
+func (q *Queries) InviteParticipantToTrip(ctx context.Context, arg InviteParticipantToTripParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, inviteParticipantToTrip, arg.TripID, arg.Email)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
 type InviteParticipantsToTripParams struct {
 	TripID uuid.UUID `db:"trip_id" json:"trip_id"`
 	Email  string    `db:"email" json:"email"`

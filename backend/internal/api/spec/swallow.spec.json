@@ -97,7 +97,9 @@
             "description": "Default Response",
             "content": {
               "application/json": {
-                "schema": { "enum": ["null"], "nullable": true }
+                "schema": {
+                  "$ref": "#/components/schemas/InviteParticipantResponse"
+                }
               }
             }
           },
@@ -415,6 +417,14 @@
           }
         },
         "required": ["email"],
+        "additionalProperties": false
+      },
+      "InviteParticipantResponse": {
+        "type": "object",
+        "properties": {
+          "participantId": { "type": "string", "format": "uuid" }
+        },
+        "required": ["participantId"],
         "additionalProperties": false
       },
       "CreateActivityRequest": {
