@@ -3,11 +3,15 @@
 @tripId = 42bf829c-3faa-424c-9ff4-d9b061561002
 @linkId = 72ec7b6d-26e9-404c-8b7f-fb613187e07e
 
-### Confirm a Participant
-PATCH {{baseUrl}}/participants/{{participantId}}/confirm
+### --------------------- // ---------------------
+
+### Trips
+
+#### Fetch a Specific Trip
+GET {{baseUrl}}/trips/{{tripId}}
 ###
 
-### Create a New Trip
+#### Create a New Trip
 POST {{baseUrl}}/trips
 Content-Type: application/json
 
@@ -24,15 +28,7 @@ Content-Type: application/json
 }
 ###
 
-### Fetch a Specific Trip
-GET {{baseUrl}}/trips/{{tripId}}
-###
-
-### Confirm a Trip
-GET {{baseUrl}}/trips/{{tripId}}/confirm
-###
-
-### Update Trip Details
+#### Update Trip Details
 PUT {{baseUrl}}/trips/{{tripId}}
 Content-Type: application/json
 
@@ -43,11 +39,36 @@ Content-Type: application/json
 }
 ###
 
-### Get Participants of a Trip
+#### Confirm a Trip
+GET {{baseUrl}}/trips/{{tripId}}/confirm
+###
+
+### --------------------- // ---------------------
+
+### Participants
+
+#### Get Participants of a Trip
 GET {{baseUrl}}/trips/{{tripId}}/participants
 ###
 
-### Create a New Activity for a Trip
+#### Confirm a Participant
+PATCH {{baseUrl}}/participants/{{participantId}}/confirm
+###
+
+#### Invite a New Participant to a Trip
+POST {{baseUrl}}/trips/{{tripId}}/invites
+Content-Type: application/json
+
+{
+  "email": "contact2@higorjardini.dev"
+}
+###
+
+### --------------------- // ---------------------
+
+### Activities
+
+#### Create a New Activity for a Trip
 POST {{baseUrl}}/trips/{{tripId}}/activities
 Content-Type: application/json
 
@@ -57,20 +78,15 @@ Content-Type: application/json
 }
 ###
 
-### Get Activities of a Trip
+#### Get Activities of a Trip
 GET {{baseUrl}}/trips/{{tripId}}/activities
 ###
 
-### Invite a Participant to a Trip
-POST {{baseUrl}}/trips/{{tripId}}/invites
-Content-Type: application/json
+### --------------------- // ---------------------
 
-{
-  "email": "contact2@higorjardini.dev"
-}
-###
+### Links
 
-### Add a Link to a Trip
+#### Add a Link to a Trip
 POST {{baseUrl}}/trips/{{tripId}}/links
 Content-Type: application/json
 
@@ -80,6 +96,6 @@ Content-Type: application/json
 }
 ###
 
-### Get Links of a Trip
+#### Get Links of a Trip
 GET {{baseUrl}}/trips/{{tripId}}/links
 ###
